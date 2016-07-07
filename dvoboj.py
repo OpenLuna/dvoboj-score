@@ -3,14 +3,15 @@ from fotr_score import Score
 import time
 import sys, getopt
 import threading
+from  multiprocessing import Process
 from time import sleep
 
 def run(person, borders):
     def beerLoop():
         while True:
             serial.read()
-            sleep(0.02)
-            print stop_threads
+            #sleep(0.05)
+            #print stop_threads
             if stop_threads:
                 break
 
@@ -24,13 +25,14 @@ def run(person, borders):
     serial = SerialReader(strPort, borders)
     score = Score(person)
     stop_threads = False
-    t2 = threading.Thread(target = beerLoop)
+    t2 = Process(target = beerLoop)
     t2.start()
     
     while True:
         if not score.update():
             stop_threads=True
             t2.join()
+	    stop_threads=True
             break
         sleep(5)
 
