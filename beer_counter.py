@@ -6,6 +6,7 @@ import numpy as np
 from time import sleep
 from collections import deque
 import re
+import requests
 
 class SerialReader:
     def __init__(self, strPort, borders):
@@ -81,6 +82,8 @@ class BeerCounter:
                 self.isIn = False
                 self.framesOut = 45
                 self.counter += 1
+                print "send beer"
+                requests.get("http://knedl.si/djnd/add/polica")
                 print "Števec piru: " + str(self.counter)
         else:
             self.framesOut += 1

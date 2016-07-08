@@ -21,7 +21,7 @@ class Score():
         self.value=""
         self.v=(160,160)
 
-        #screen = toggle_fullscreen()
+        #screen = self.toggle_fullscreen()
         self.text_surface = self.font_big.render('%s'%self.value, True, self.WHITE)
         self.rect = self.text_surface.get_rect(center=self.v)
         self.screen.blit(self.text_surface, self.rect)
@@ -36,36 +36,33 @@ class Score():
         self.update()
             
 
-    def toggle_fullscreen():
-        screen = pygame.display.get_surface()
-        tmp = screen.convert()
+    def toggle_fullscreen(self):
+        self.screen = pygame.display.get_surface()
+        tmp = self.screen.convert()
         caption = pygame.display.get_caption()
         #cursor = pygame.mouse.get_cursor()  # Duoas 16-04-2007 
         
-        w,h = screen.get_width(),screen.get_height()
-        flags = screen.get_flags()
-        bits = screen.get_bitsize()
+        w,h = self.screen.get_width(),self.screen.get_height()
+        flags = self.screen.get_flags()
+        bits = self.screen.get_bitsize()
         
         pygame.display.quit()
         pygame.display.init()
         
-        screen = pygame.display.set_mode((w,h),flags^FULLSCREEN,bits)
-        screen.blit(tmp,(0,0))
+        self.screen = pygame.display.set_mode((w,h),flags^FULLSCREEN,bits)
+        self.screen.blit(tmp,(0,0))
         pygame.display.set_caption(*caption)
      
         pygame.key.set_mods(0) #HACK: work-a-round for a SDL bug??
      
         #pygame.mouse.set_cursor( *cursor )  # Duoas 16-04-2007
-        
-        return screen
 
     def update(self):
         try:
             
             points = json.loads(requests.get("http://dvoboj.si/api/getPoints/").text)
             self.value=points[self.person]
-            print points
-
+            print "update points"
         except:
             print "request fail"
             return True
@@ -74,9 +71,9 @@ class Score():
         self.screen.fill((0,0,0))
         self.screen.blit(self.text_surface, rect)
         if points["winner"]==self.person:
-            self.screen.blit(self.goldcrown, (160-50,90-50))
+            self.screen.blit(self.goldcrown, (160-50,30))
         else:
-            self.screen.blit(self.silvercrown, (160-50,90-50))
+            self.screen.blit(self.silvercrown, (160-50,30))
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
                 return False
@@ -89,4 +86,4 @@ if __name__ == '__main__':
     score = Score("sin")
     while True:
         sleep(5)
-        self.update()
+        score.update()

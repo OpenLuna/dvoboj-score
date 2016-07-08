@@ -2,23 +2,37 @@ from beer_counter import SerialReader
 from fotr_score import Score
 import time
 import sys, getopt
+import threading
+from time import sleep
 
 def run(person, borders):
+    def beerLoop():
+        while True:
+            serial.read()
+            sleep(0.02)
+            print stop_threads
+            if stop_threads:
+                break
+
     strPort = '/dev/ttyACM0'
     #strPort = args.port
 
     print('reading from serial port %s...' % strPort)
     if person not in ["sin","oce"]:
         assert("Invalid person")
+
     serial = SerialReader(strPort, borders)
     score = Score(person)
-    start_time = time.time()
+    stop_threads = False
+    t2 = threading.Thread(target = beerLoop)
+    t2.start()
+    
     while True:
-        serial.read()
-        if time.time()-start_time > 5:
-            start_time = time.time()
-            if not score.update():
-                break;
+        if not score.update():
+            stop_threads=True
+            t2.join()
+            break
+        sleep(5)
 
 
 
