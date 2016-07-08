@@ -64,8 +64,8 @@ class BeerCounter:
             self.beers = 0
             print "sent success"
         else:
-            self.beer += 1
-            print "sent fail", self.beer
+            self.beers += 1
+            print "sent fail", self.beers
         return
     # add data
     def add(self, data):
