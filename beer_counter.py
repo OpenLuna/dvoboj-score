@@ -59,12 +59,12 @@ class BeerCounter:
 
     def sendBeers(self):
         resp = requests.get("http://knedl.si/djnd/add/polica").status_code
-        if resp != 200:
-            self.beers += 1
+        if resp == 200:
+            self.beers = 0
             print "sent success"
         else:
-            self.beer = 0
-            print "sent fail"
+            self.beer += 1
+            print "sent fail", self.beer
         return
     # add data
     def add(self, data):
