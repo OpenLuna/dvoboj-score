@@ -10,11 +10,11 @@ import requests
 from  multiprocessing import Process
 
 class SerialReader:
-    def __init__(self, strPort, borders):
+    def __init__(self, strPort, borders, person):
         # open serial port
         print "Serial init start"
         self.ser = serial.Serial(strPort, 9600)
-        self.counters = [BeerCounter(250) for i in range(borders)]
+        self.counters = [BeerCounter(250, person) for i in range(borders)]
         print "Serial init done"
 
     # update data
@@ -40,7 +40,7 @@ class SerialReader:
 # plot class
 class BeerCounter:
     # constr
-    def __init__(self, maxLen):
+    def __init__(self, maxLen, person):
         # open serial port
 
         self.ax = deque([0.0]*maxLen)
@@ -51,6 +51,7 @@ class BeerCounter:
         self.counter = 0
 
         self.beers=0
+        self.person = person
     
     # add to buffer
     def addToBuf(self, buf, val):
@@ -58,7 +59,7 @@ class BeerCounter:
         buf.appendleft(val)
 
     def sendBeers(self):
-        resp = requests.get("http://knedl.si/djnd/add/polica").status_code
+        resp = requests.get("http://knedl.si/djnd/add/polica_"+self.person).status_code
         if resp == 200:
             self.beers = 0
             print "sent success"
@@ -105,7 +106,7 @@ def main():
     print('reading from serial port %s...' % strPort)
 
     #counter = BeerCounter(strPort, 250)
-    serial = SerialReader(strPort, 2)
+    serial = SerialReader(strPort, 2, "test")
     print('plotting data...')
 
     while True:

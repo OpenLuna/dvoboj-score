@@ -22,7 +22,7 @@ def run(person, borders):
     if person not in ["sin","oce"]:
         assert("Invalid person")
 
-    serial = SerialReader(strPort, borders)
+    serial = SerialReader(strPort, borders, person)
     score = Score(person)
     stop_threads = False
     t2 = Process(target = beerLoop)
