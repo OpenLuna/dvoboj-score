@@ -12,25 +12,27 @@ class Score():
         self.person = person
         pygame.init()
 
-        self.screen = pygame.display.set_mode((320, 200))
+        self.screen = pygame.display.set_mode((800, 480))
         self.screen.fill((0,0,0))
-        pygame.display.update()
-         
-        self.font_big = pygame.font.Font(os.path.join('assets', 'OpenSans-ExtraBold.ttf'), 50)
+        pygame.display.update()         
+        self.font_big = pygame.font.Font(os.path.join('assets', 'OpenSans-ExtraBold.ttf'), 140)
         #self.font_big = pygame.font.Font(None , 64)
         self.value=""
-        self.v=(160,160)
+        self.v=(400,120)
 
-        #screen = self.toggle_fullscreen()
+        screen = self.toggle_fullscreen()
         self.text_surface = self.font_big.render('%s'%self.value, True, self.WHITE)
-        self.rect = self.text_surface.get_rect(center=self.v)
+        self.text_surface = pygame.transform.rotate(self.text_surface, 180)
+	self.rect = self.text_surface.get_rect(center=self.v)
         self.screen.blit(self.text_surface, self.rect)
 
         self.goldcrown = pygame.image.load(os.path.join('assets', 'gold.png'))
-        self.goldcrown = pygame.transform.scale(self.goldcrown, (100, 100))
+        self.goldcrown = pygame.transform.scale(self.goldcrown, (200, 200))
         self.silvercrown = pygame.image.load(os.path.join('assets', 'silver.png'))
-        self.silvercrown = pygame.transform.scale(self.silvercrown, (100, 100))
-        pygame.mouse.set_visible(False)
+        self.silvercrown = pygame.transform.scale(self.silvercrown, (200, 200))
+        self.goldcrown = pygame.transform.rotate(self.goldcrown, 180)
+	self.silvercrown = pygame.transform.rotate(self.silvercrown, 180)
+	pygame.mouse.set_visible(False)
         pygame.display.update()
 
         self.update()
@@ -67,17 +69,19 @@ class Score():
             print "request fail"
             return True
         self.text_surface = self.font_big.render('%s'%self.value, True, self.WHITE)
+	self.text_surface = pygame.transform.rotate(self.text_surface, 180)
         rect = self.text_surface.get_rect(center=self.v)
         self.screen.fill((0,0,0))
         self.screen.blit(self.text_surface, rect)
         if points["winner"]==self.person:
-            self.screen.blit(self.goldcrown, (160-50,30))
+            self.screen.blit(self.goldcrown, (300,230))
         else:
-            self.screen.blit(self.silvercrown, (160-50,30))
+            self.screen.blit(self.silvercrown, (300,230))
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
                 return False
-        pygame.display.update()
+	pygame.display.flip()
+        #pygame.display.update()
         return True
 
 
