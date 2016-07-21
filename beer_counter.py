@@ -14,14 +14,14 @@ class SerialReader:
         # open serial port
         print "Serial init start"
         self.ser = serial.Serial(strPort, 9600)
-        self.counters = [BeerCounter(250, person) for i in range(borders)]
+        self.counters = [BeerCounter(250, person, "Polica_"+str(i)) for i in range(borders)]
         print "Serial init done"
 
     # update data
     def read(self):
         try:
             line = self.ser.readline()
-            #print line
+            print line
             line = re.sub('\r\n', '', line)
             try:
                 datas = [float(val) for val in line.split(" ")]
@@ -40,7 +40,7 @@ class SerialReader:
 # plot class
 class BeerCounter:
     # constr
-    def __init__(self, maxLen, person):
+    def __init__(self, maxLen, person, name="polica"):
         # open serial port
 
         self.ax = deque([0.0]*maxLen)
@@ -52,6 +52,7 @@ class BeerCounter:
 
         self.beers=0
         self.person = person
+        self.name=name
     
     # add to buffer
     def addToBuf(self, buf, val):
@@ -82,7 +83,7 @@ class BeerCounter:
                 self.isIn = False
                 self.framesOut = 45
                 self.counter += 1
-                print "send beer BEER BEER BEER BEER"
+                print "BEER BEER BEER BEER "+ self.name
                 t2 = Process(target = self.sendBeers)
                 t2.start()
                 print "Števec piru: " + str(self.counter)
