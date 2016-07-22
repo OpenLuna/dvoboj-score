@@ -16,13 +16,20 @@ class SerialReader:
         self.ser = serial.Serial(strPort, 9600)
         self.counters = [BeerCounter(250, person, "Polica_"+str(i)) for i in range(borders)]
         print "Serial init done"
-
+	self.ivan = 0
     # update data
     def read(self):
         try:
             line = self.ser.readline()
-            print line
+            #print line
             line = re.sub('\r\n', '', line)
+
+	    if self.ivan > 10:
+                print line
+                self.ivan = 0
+            else:
+                self.ivan += 1
+
             try:
                 datas = [float(val) for val in line.split(" ")]
             except:
@@ -71,7 +78,8 @@ class BeerCounter:
     # add data
     def add(self, data):
         self.addToBuf(self.ax, float(data)*10.0)
-
+	
+	#print np.gradient(self.ax)[:15]
         #checker
         if self.isIn:
             self.framesIn += 1
@@ -79,7 +87,7 @@ class BeerCounter:
                 self.isIn = False
                 self.framesOut = 45
                 print "time out"
-            if np.gradient(self.ax)[0] > 2:# and self.framesIn > 1:
+            if np.gradient(self.ax)[0] > 15:# and self.framesIn > 1:
                 self.isIn = False
                 self.framesOut = 45
                 self.counter += 1
@@ -89,7 +97,7 @@ class BeerCounter:
                 print "Števec piru: " + str(self.counter)
         else:
             self.framesOut += 1
-            if np.gradient(self.ax)[0]<-2 and self.framesOut > 50:
+            if np.gradient(self.ax)[0]<-15 and self.framesOut > 50:
                 self.isIn = True
                 self.framesIn = 0
 
@@ -107,7 +115,7 @@ def main():
     print('reading from serial port %s...' % strPort)
 
     #counter = BeerCounter(strPort, 250)
-    serial = SerialReader(strPort, 2, "test")
+    serial = SerialReader(strPort, 6, "test")
     print('plotting data...')
 
     while True:
@@ -115,7 +123,7 @@ def main():
         #counter.update()
         start_time = time()
         serial.read()
-        print time()-start_time
+        #print time()-start_time
 
     # clean up
     counter.close()
