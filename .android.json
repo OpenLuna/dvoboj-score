@@ -1,0 +1,1 @@
+{"layout": "internal", "orientation": "portrait", "package": "si.kunst.dvoboj", "google_play_key": null, "include_pil": false, "expansion": false, "name": "dvoboj", "source": false, "icon_name": "dvoboj score", "version": "1.0", "store": "none", "target_version": 14, "permissions": ["VIBRATE"], "include_sqlite": false, "google_play_salt": null, "numeric_version": "1"}

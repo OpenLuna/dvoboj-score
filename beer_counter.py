@@ -53,6 +53,8 @@ class BeerCounter:
         self.beers=0
         self.person = person
         self.name=name
+
+        self.api_cals = {"sin": "addVotesForSin", "oce": "addVotesForOce"}
     
     # add to buffer
     def addToBuf(self, buf, val):
@@ -60,12 +62,15 @@ class BeerCounter:
         buf.appendleft(val)
 
     def sendBeers(self):
-        resp = requests.get("http://knedl.si/djnd/add/polica_"+self.person).status_code
+        resp = 400
+        #resp = requests.get("http://knedl.si/djnd/add/polica_"+self.person).status_code
+        self.beers += 1
+        #resp = requests.get("http://dvoboj.si/api/"+self.api_cals[self.person]+"/"+str(self.beers)+"/polica").status_code
+        print "http://dvoboj.si/api/"+self.api_cals[self.person]+"/"+str(self.beers)+"/polica"
         if resp == 200:
             self.beers = 0
             print "sent success"
         else:
-            self.beers += 1
             print "sent fail", self.beers
         return
     # add data
@@ -107,7 +112,8 @@ def main():
     print('reading from serial port %s...' % strPort)
 
     #counter = BeerCounter(strPort, 250)
-    serial = SerialReader(strPort, 2, "test")
+
+    serial = SerialReader(strPort, 1, "test")
     print('plotting data...')
 
     while True:
