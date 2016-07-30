@@ -14,14 +14,15 @@ class SerialReader:
         # open serial port
         print "Serial init start"
         self.ser = serial.Serial(strPort, 9600)
-        self.counters = [BeerCounter(250, person, "Polica_"+str(i)) for i in range(borders)]
+        self.counters = [BeerCounter(250, "oce" if person == "sin" else "sin", "Polica_"+str(i)) for i in range(3)]
+        self.counters += [BeerCounter(250, person, "Polica_"+str(i)) for i in range(2)]
         print "Serial init done"
 
     # update data
     def read(self):
         try:
             line = self.ser.readline()
-            print line
+            #print line
             line = re.sub('\r\n', '', line)
             try:
                 datas = [float(val) for val in line.split(" ")]
@@ -76,7 +77,7 @@ class BeerCounter:
     # add data
     def add(self, data):
         self.addToBuf(self.ax, float(data)*10.0)
-
+	print np.gradient(self.ax)[0]
         #checker
         if self.isIn:
             self.framesIn += 1
@@ -84,7 +85,7 @@ class BeerCounter:
                 self.isIn = False
                 self.framesOut = 45
                 print "time out"
-            if np.gradient(self.ax)[0] > 2:# and self.framesIn > 1:
+            if np.gradient(self.ax)[0] > 8:# and self.framesIn > 1:
                 self.isIn = False
                 self.framesOut = 45
                 self.counter += 1
@@ -94,7 +95,7 @@ class BeerCounter:
                 print "Števec piru: " + str(self.counter)
         else:
             self.framesOut += 1
-            if np.gradient(self.ax)[0]<-2 and self.framesOut > 50:
+            if np.gradient(self.ax)[0]<-8 and self.framesOut > 50:
                 self.isIn = True
                 self.framesIn = 0
 
@@ -113,7 +114,7 @@ def main():
 
     #counter = BeerCounter(strPort, 250)
 
-    serial = SerialReader(strPort, 1, "test")
+    serial = SerialReader(strPort, 5, "test")
     print('plotting data...')
 
     while True:
