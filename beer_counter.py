@@ -17,13 +17,20 @@ class SerialReader:
         self.counters = [BeerCounter(250, "oce" if person == "sin" else "sin", "Polica_"+str(i)) for i in range(3)]
         self.counters += [BeerCounter(250, person, "Polica_"+str(i)) for i in range(2)]
         print "Serial init done"
-
+	self.ivan = 0
     # update data
     def read(self):
         try:
             line = self.ser.readline()
             #print line
             line = re.sub('\r\n', '', line)
+
+	    if self.ivan > 10:
+                print line
+                self.ivan = 0
+            else:
+                self.ivan += 1
+
             try:
                 datas = [float(val) for val in line.split(" ")]
             except:
@@ -77,7 +84,9 @@ class BeerCounter:
     # add data
     def add(self, data):
         self.addToBuf(self.ax, float(data)*10.0)
-	print np.gradient(self.ax)[0]
+
+        print np.gradient(self.ax)[0]
+
         #checker
         if self.isIn:
             self.framesIn += 1
@@ -122,7 +131,7 @@ def main():
         #counter.update()
         start_time = time()
         serial.read()
-        print time()-start_time
+        #print time()-start_time
 
     # clean up
     counter.close()
