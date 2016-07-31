@@ -15,7 +15,7 @@ class Score():
         self.screen = pygame.display.set_mode((800, 480))
         self.screen.fill((0,0,0))
         pygame.display.update()         
-        self.font_big = pygame.font.Font(os.path.join('assets', 'OpenSans-ExtraBold.ttf'), 140)
+        self.font_big = pygame.font.Font(os.path.join('/home/pi/dvoboj-score/assets', 'OpenSans-ExtraBold.ttf'), 140)
         #self.font_big = pygame.font.Font(None , 64)
         self.value=""
         self.v=(400,120)
@@ -26,9 +26,9 @@ class Score():
 	self.rect = self.text_surface.get_rect(center=self.v)
         self.screen.blit(self.text_surface, self.rect)
 
-        self.goldcrown = pygame.image.load(os.path.join('assets', 'gold.png'))
+        self.goldcrown = pygame.image.load(os.path.join('/home/pi/dvoboj-score/assets', 'gold.png'))
         self.goldcrown = pygame.transform.scale(self.goldcrown, (200, 200))
-        self.silvercrown = pygame.image.load(os.path.join('assets', 'silver.png'))
+        self.silvercrown = pygame.image.load(os.path.join('/home/pi/dvoboj-score/assets', 'silver.png'))
         self.silvercrown = pygame.transform.scale(self.silvercrown, (200, 200))
         self.goldcrown = pygame.transform.rotate(self.goldcrown, 180)
 	self.silvercrown = pygame.transform.rotate(self.silvercrown, 180)

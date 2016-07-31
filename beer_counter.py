@@ -73,8 +73,8 @@ class BeerCounter:
         resp = 400
         #resp = requests.get("http://knedl.si/djnd/add/polica_"+self.person).status_code
         self.beers += 1
-        #resp = requests.get("http://dvoboj.si/api/"+self.api_cals[self.person]+"/"+str(self.beers)+"/polica").status_code
-        print "http://dvoboj.si/api/"+self.api_cals[self.person]+"/"+str(self.beers)+"/polica"
+        resp = requests.get("http://dvoboj.si/api/"+self.api_cals[self.person]+"/"+str(self.beers)+"/polica").status_code
+        url = "http://dvoboj.si/api/"+self.api_cals[self.person]+"/"+str(self.beers)+"/polica"
         if resp == 200:
             self.beers = 0
             print "sent success"
@@ -85,7 +85,7 @@ class BeerCounter:
     def add(self, data):
         self.addToBuf(self.ax, float(data)*10.0)
 
-        print np.gradient(self.ax)[0]
+        #print np.gradient(self.ax)[0]
 
         #checker
         if self.isIn:
